@@ -34,11 +34,16 @@ export class WebhookService {
     }
 
     public async handleReciveMessage(data: WebhookMessageDto): Promise<boolean> {
+        //extracting message from recieved notification via webhook
+        //this should be send to the AI model to generate a reply
         const message = data.entry[0].changes[0].value.messages[0].text.body;
+        
+        //extracting phone number and name from recieved notification via webhook
         const phoneNumber = data.entry[0].changes[0].value.contacts[0].wa_id;
         const name = data.entry[0].changes[0].value.contacts[0].profile.name;
 
         const replyMessage = `Hello ${name}, your Message Received`;
+        //const replyMessage = await this.aiService.generateReply(message);
 
         const isReplied = await this.messageService.sendMessage(phoneNumber, replyMessage);
         

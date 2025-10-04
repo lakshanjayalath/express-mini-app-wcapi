@@ -7,5 +7,7 @@ export const APP_CONFIG = {
     VERSION: process.env.VERSION,
     WHATSAPP_USER_ACCESS_TOKEN: process.env.WHATSAPP_USER_ACCESS_TOKEN,
     WEBHOOK_VERIFICATION_PASSWORD: process.env.WEBHOOK_VERIFICATION_PASSWORD,
-    PORT: 8558
+    PORT: process.env.PORT,
+    OPEN_AI_KEY: process.env.OPEN_AI_KEY,
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY
 }
