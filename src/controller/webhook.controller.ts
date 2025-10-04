@@ -1,22 +1,41 @@
 import { Request, Response } from "express"
+import { WebhookService } from "../service/webhook.service";
+import { WebhookMessageDto } from "../dto/webhookVerification.dto";
 
 export class WebhookController {
 
+    private webhookService: WebhookService;
+
+    constructor() {
+        this.webhookService = WebhookService.getInstance();
+    }
+
     webhook = async (req: Request, res: Response) => {
-        console.log(JSON.stringify(req.query));
-        const mood = req.query['hub.mode'];
-        const challenge = req.query['hub.challenge'];
-        let verify_token = req.query['hub.verify_token'];
-        console.log(mood, challenge, verify_token);
-        if (mood === "subscribe" && verify_token === '1234567890') {
-            res.send(challenge);
+        const mode = req.query['hub.mode'] as string;
+        const challenge = req.query['hub.challenge'] as string;
+        let verify_token = req.query['hub.verify_token'] as string;
+
+        const data = {
+            mode,
+            challenge,
+            verify_token
+        }
+        const response = this.webhookService.handleWebhookVerification(data);
+        if (response.status) {
+            res.send(response.challenge);
             return;
         }
         res.send('Enter, Wrong token');
     }
 
-    webhookMessage = async(req: Request, res: Response) => {
-        console.log(JSON.stringify(req.body));
+    webhookMessage = async (req: Request, res: Response) => {
+        // console.log(JSON.stringify(req.body));
+        const data = req.body as WebhookMessageDto;
+
+        const message = data.entry[0].changes[0].value.messages[0].text.body;
+        const phoneNumber = data.entry[0].changes[0].value.contacts[0].wa_id;
+
+        console.log(phoneNumber+ ": " +message);
     }
 
 }
