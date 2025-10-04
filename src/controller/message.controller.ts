@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 
 export class MessageController {
 
-    
+
 
     sendMessage = async (req: Request, res: Response) => {
         const { phoneNumber, message } = req.body;
@@ -18,7 +18,7 @@ export class MessageController {
                 "body": message
             }
         });
-    
+
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
@@ -29,7 +29,7 @@ export class MessageController {
             },
             data: data
         };
-    
+
         await axios.request(config)
             .then((response: any) => {
                 console.log(JSON.stringify(response.data));
