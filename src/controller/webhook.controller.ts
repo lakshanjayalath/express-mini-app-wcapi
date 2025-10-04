@@ -32,10 +32,16 @@ export class WebhookController {
         // console.log(JSON.stringify(req.body));
         const data = req.body as WebhookMessageDto;
 
-        const message = data.entry[0].changes[0].value.messages[0].text.body;
-        const phoneNumber = data.entry[0].changes[0].value.contacts[0].wa_id;
+        const isReplied = await this.webhookService.handleReciveMessage(data);
 
-        console.log(phoneNumber+ ": " +message);
+        if (isReplied) {
+            res.status(200).send('OK');
+        } else {
+            res.status(500).send('Error');
+        }
+
+
+
     }
 
 }
